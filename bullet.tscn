@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://rb.png" type="Texture" id=1]
+[ext_resource path="res://bullet.gd" type="Script" id=2]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[node name="bullet" type="Sprite"]
+self_modulate = Color( 2.62, 35.24, 36.29, 1 )
+material = SubResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="onScreenNotifier" type="VisibilityNotifier2D" parent="."]
+
+[connection signal="screen_exited" from="onScreenNotifier" to="." method="_on_onScreenNotifier_screen_exited"]

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://rtb.png" type="Texture" id=1]
+
+[node name="Path_Bullet" type="Sprite"]
+self_modulate = Color( 3.78, 2.73, 6.52, 1 )
+position = Vector2( 95, 92 )
+texture = ExtResource( 1 )

@@ -1,0 +1,177 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://background.gd" type="Script" id=1]
+[ext_resource path="res://nebula.jpg" type="Texture" id=2]
+[ext_resource path="res://boss2.gd" type="Script" id=4]
+[ext_resource path="res://boss2.png" type="Texture" id=7]
+
+[sub_resource type="Environment" id=1]
+background_mode = 4
+tonemap_mode = 3
+tonemap_exposure = 0.52
+dof_blur_far_distance = 18.75
+dof_blur_far_transition = 1.09
+dof_blur_near_distance = 1.38
+dof_blur_near_transition = 0.04
+dof_blur_near_amount = 1.0
+dof_blur_near_quality = 2
+glow_enabled = true
+glow_intensity = 2.06
+glow_strength = 0.67
+glow_bloom = 0.15
+glow_blend_mode = 0
+glow_hdr_threshold = 0.05
+glow_hdr_luminance_cap = 1.59
+glow_hdr_scale = 1.72
+glow_bicubic_upscale = true
+glow_high_quality = true
+
+[sub_resource type="Shader" id=26]
+code = "shader_type canvas_item;
+
+const float TAU = 6.28318530718;
+
+uniform int iteration_times = 5;
+uniform float speed = 1;
+uniform vec4 color :hint_color = vec4(0.0, .35, .5, 1.0);
+uniform float intensity = .005;
+
+void fragment() 
+{
+    lowp vec2 p = mod(UV*TAU, TAU)-250.0;
+	lowp vec2 i = vec2(p);
+	lowp float c = 1.0;
+	lowp float t = TIME * speed;
+
+	for (int n = 0; n < iteration_times; n++) 
+	{
+		i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(t + i.x));
+		c += 1.0/length(vec2(p.x / (sin(i.x+t)/intensity),p.y / (cos(i.y+t)/intensity)));
+	}
+	c /= float(iteration_times);
+	c = 1.17-pow(c, 1.4);
+	vec4 colour = vec4(pow(abs(c), 8.0));
+    colour = clamp(colour + color, 0.0, 1.0);
+    
+	COLOR = colour;
+}"
+
+[sub_resource type="ShaderMaterial" id=27]
+shader = SubResource( 26 )
+shader_param/iteration_times = 5
+shader_param/speed = 1.0
+shader_param/color = Color( 0, 0.35, 0.5, 1 )
+shader_param/intensity = 0.005
+
+[sub_resource type="CanvasItemMaterial" id=15]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="AtlasTexture" id=17]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=18]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 102, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=19]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 204, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=20]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 306, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=21]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 408, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=22]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 510, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=23]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 612, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=24]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 714, 0, 102, 115 )
+
+[sub_resource type="AtlasTexture" id=25]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 816, 0, 102, 115 )
+
+[sub_resource type="SpriteFrames" id=14]
+animations = [ {
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 24 ), SubResource( 23 ), SubResource( 22 ), SubResource( 21 ), SubResource( 20 ), SubResource( 19 ), SubResource( 18 ), SubResource( 17 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CanvasItemMaterial" id=16]
+blend_mode = 1
+light_mode = 2
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[node name="Game" type="Sprite"]
+position = Vector2( 290, 192 )
+__meta__ = {
+"_edit_vertical_guides_": [ 980.0 ]
+}
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 1 )
+
+[node name="background" type="Sprite" parent="."]
+self_modulate = Color( 0, 1, 1, 1 )
+material = SubResource( 27 )
+position = Vector2( -290, -192 )
+texture = ExtResource( 2 )
+centered = false
+script = ExtResource( 1 )
+
+[node name="boss" type="AnimatedSprite" parent="."]
+modulate = Color( 0.9375, 0.909319, 0.216064, 1 )
+self_modulate = Color( 1.62, 2.73, 4.34, 0.6 )
+material = SubResource( 15 )
+position = Vector2( 689, 96 )
+rotation = 3.14159
+frames = SubResource( 14 )
+frame = 12
+playing = true
+script = ExtResource( 4 )
+
+[node name="burner" type="CPUParticles2D" parent="boss"]
+self_modulate = Color( 4, 2.46, 1.61, 0.83 )
+material = SubResource( 16 )
+position = Vector2( 3.99981, 77 )
+amount = 300
+draw_order = 1
+emission_shape = 2
+emission_rect_extents = Vector2( 10, 30 )
+linear_accel = 62.71
+linear_accel_random = 0.5
+radial_accel = 37.38
+radial_accel_random = 0.21
+scale_amount = 3.0
+scale_amount_random = 0.07
+hue_variation = 0.02
+hue_variation_random = 0.11
