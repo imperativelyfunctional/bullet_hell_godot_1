@@ -14,7 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 Questions: 
 https://discord.gg/bdSe7hvNb6
 
-Youtube demo: https://youtu.be/Fws388-iqno
+Youtube demo: https://youtu.be/LdWzqZHXMhs
 
 
 ![demo](https://github.com/imperativelyfunctional/bullet_hell_4/blob/main/demo.gif)
